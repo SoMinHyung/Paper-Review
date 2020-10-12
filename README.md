@@ -4,5 +4,5 @@
 <p align=center><i> POS · Named Entity Recognition · Entity Disambiguation </i></p>  
   
 ## Papers  
-* \[2014/09\] [**Neural machine translation by jointly learning to align and translate**](https://blog.naver.com/sooftware/221661644808)    
+* \[2014/09\] [**Neural machine translation by jointly learning to align and translate**](https://github.com/SoMinHyung/Paper-Review/blob/main/Review/Neural%20machine%20translation%20by%20jointly%20learning%20to%20align%20and%20translate.md)    
 
