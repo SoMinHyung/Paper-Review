@@ -103,8 +103,8 @@ Attention 함수는 query와 key-value쌍을 토대로 output을 만들어주는
  Scaled dot-product attention에는 3개의 input값이 들어간다. Query와 key는 Dk dimension, values는 Dv dimension의 값이다. Query와 모든 Key들과 행렬곱(dot product)을 하고, √Dk로 나눠준다. 그리고 softmax를 취해 나온 확률 값에 value를 곱하면 된다.
 
  실제 계산할 때, Query, Key, Value를 하나씩 곱해서 하나씩 attention값을 구하는 것이 아니라 행렬 형태로 묶어서 한번에 계산한다. Queries는 Q, Keys는 K, Values는 V로 표현한다. 수식으로 표현하면 다음과 같다.
-
-![image](https://user-images.githubusercontent.com/11614046/102841656-b8946880-4448-11eb-81a9-758adea64142.png)
+ 
+ <img src="https://user-images.githubusercontent.com/11614046/102841656-b8946880-4448-11eb-81a9-758adea64142.png" width="40%">
 
  수식으로 표현하면 아래와 같다.
  
@@ -120,8 +120,7 @@ def attention(Q, K, V):
  Additive attention은 dk의 값이 작다면 scaling할 필요가 없기 때문에 dot-product보다 성능이 좋다. 하지만, dk가 커진다면 dot-product의 값이 커지기 때문에, softmax를 취했을 때의 미분값이 작아지는 문제점이 있다. 이에 대응하기 위해 우리는 dot-product값을 √dk로 scaling해주었다.
 
 
-
-![image](https://user-images.githubusercontent.com/11614046/102757276-6bff4d80-43b4-11eb-93f2-4bb042c01e52.png)
+<img src="https://user-images.githubusercontent.com/11614046/102757276-6bff4d80-43b4-11eb-93f2-4bb042c01e52.png" width="40%">
 
 (추가 설명1) Q, K, V가 무엇인지 설명하자면, Q는 attention값을 알고 싶은 단어이다. K와 V는 사실 같은 단어를 의미한다. 하지만 두개로 나눈 이유는 key값을 위한 vector와 value값을 위한 vector를 따로 만들어서 계산하기 위함이다. Self-attention의 경우에는 Q는 토큰, K=V는 하나의 sequence tokens가 될 것이다.
 
@@ -131,13 +130,13 @@ def attention(Q, K, V):
 
 #### 3.2.2 Multi-Head Attention 
 
-![image](https://user-images.githubusercontent.com/11614046/102757423-a5d05400-43b4-11eb-9819-2c44e470fc88.png)
+<img src="https://user-images.githubusercontent.com/11614046/102757423-a5d05400-43b4-11eb-9819-2c44e470fc88.png" width="40%">
 
  Multi-head attention은 기존의 attention을 한번만 적용하는 것이 아니라, h번 반복하여 attention을 적용한다. 각 Q, K, V는 linear하게 h번 반복하여 생성하며, attention연산을 병렬적으로 처리한다. 이렇게 구한 값들은 마지막에 다 더해주고, W를 곱해서 dimension사이즈에 맞게 조정해줘서 최종 값을 구한다.
 
  식으로 표현하면 아래와 같다
  
-![image]( https://user-images.githubusercontent.com/11614046/102860450-3ec4a500-4471-11eb-9c97-020dbc66b7a8.png)
+ <img src="https://user-images.githubusercontent.com/11614046/102860450-3ec4a500-4471-11eb-9c97-020dbc66b7a8.png" width="40%">
  
 이 논문에서는 h=8으로 설정했기 때문에, head의 개수는 8개이다. 따라서, 각 vector의 dimension은 8로 나눠진다. Dmodel = 512이기 때문에, dk = dv = 64이다. 전체 과정을 그림으로 표현하면 아래와 같다.
 
@@ -161,7 +160,7 @@ Transformer는 multi-head attention을 3가지 다른 방식으로 사용한다.
 
  각각의 Encoder와 Decoder layer 내에는 attention sub-layer말고도, FFN네트워크라는 sub-layer가 존재한다. 이 네트워크는 두 개의 linear transformation으로 구성되어 있으며, 한번의 transformation 후에 ReLu함수를 거쳐 다시 transformation을 한다. 식은 아래와 같다.
 
-![image](https://user-images.githubusercontent.com/11614046/102863117-7b929b00-4475-11eb-8dd9-9e88c6ceb1e0.png)
+<img src="https://user-images.githubusercontent.com/11614046/102863117-7b929b00-4475-11eb-8dd9-9e88c6ceb1e0.png" width="40%">
 
 <br/>
 
@@ -175,7 +174,8 @@ Transformer는 multi-head attention을 3가지 다른 방식으로 사용한다.
 
 이 모델에서는 RNN이나 CNN을 사용하지 않기 때문에, 추가적으로 토큰의 위치 정보를 제공해야 한다. 이를 위해 토큰의 embedding된 값에 위치 정보를 넣어준다. 위치정보는 다양한 방법으로 구할 수 있으나, 여기서는 sin, cos함수를 이용하여 구한다. 식은 다음과 같다. 
 
-![image](https://user-images.githubusercontent.com/11614046/102868964-45a5e480-447e-11eb-9f6b-687ee6c5b5ba.png)
+<img src="https://user-images.githubusercontent.com/11614046/102868964-45a5e480-447e-11eb-9f6b-687ee6c5b5ba.png" width="40%">
+
 
 <br/>
 
