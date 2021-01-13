@@ -221,7 +221,6 @@ ELMO는 Ch.3에서 등장하는 Embeddings from Language Models의 약자이다.
  
  5. 현재는 attention기반의 bert와 같은 모델로 NLP의 중심주제가 넘어갔지만, ELMo는 word2vec과는 다르게 문맥의 정보를 반영하여 동음이의어와 다의어를 다른 값으로 임베딩할 수 있다는 점에서 의미가 있다고 생각한다.
  
- 현재는 bert와 같은 attention기반의 
 
 ## Reference
 
