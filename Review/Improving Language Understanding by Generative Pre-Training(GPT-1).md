@@ -38,9 +38,9 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
 
 * NLP 준지도학습(Semi-supervised learning for NLP)
  
- 우리의 연구는 자연어에서의 준지도학습에 해당한다. 이 방식은 sequence labelling이나 문서분류에의 응용에 많이 사용되고 있다. 초기의 방식은 unlabeled data에서 단어나 구절 수준의 통계를 분석하여, 지도 학습의 feature값으로 제공하는 방식이었다. 지난 몇 년간, 연구자들은 unlabeled data에서 얻은 word embedding이 다양한 과제에서 성능을 향상시킨다는 점을 증명해왔다. 그러나 이러한 방식은 단어 수준의 표현을 학습할 뿐이며, 우리는 문장 수준의 임베딩을 목표로 한다.  
+  우리의 연구는 자연어에서의 준지도학습에 해당한다. 이 방식은 sequence labelling이나 문서분류에의 응용에 많이 사용되고 있다. 초기의 방식은 unlabeled data에서 단어나 구절 수준의 통계를 분석하여, 지도 학습의 feature값으로 제공하는 방식이었다. 지난 몇 년간, 연구자들은 unlabeled data에서 얻은 word embedding이 다양한 과제에서 성능을 향상시킨다는 점을 증명해왔다. 그러나 이러한 방식은 단어 수준의 표현을 학습할 뿐이며, 우리는 문장 수준의 임베딩을 목표로 한다.  
  
- 최근에는 미분류데이터에서 단어 수준을 넘어서는 정보를 학습하는 방식을 연구하고 있다. 미분류데이터를 통해 학습된 절 단위 또는 문장 단위 임베딩은 다양한 과제에서 텍스트 데이터를 적절한 벡터 표현으로 바꿀 수 있다.  
+  최근에는 미분류데이터에서 단어 수준을 넘어서는 정보를 학습하는 방식을 연구하고 있다. 미분류데이터를 통해 학습된 절 단위 또는 문장 단위 임베딩은 다양한 과제에서 텍스트 데이터를 적절한 벡터 표현으로 바꿀 수 있다.  
    
  <br/>  
  
@@ -54,7 +54,7 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
  
 * 보조적인 학습 목적함수(Auxiliary training objectives)  
 
- 보조적인 비지도학습 목적함수를 추가하는 것은 준지도학습의 대안이다. Collobert and Weston의 초기 연구에서 POS tagging, Chunking(명사구 묶기), NER, 언어 모델링과 같은 다양한 보조 NLP 정보를 이용하여 문맥적 역할 라벨링(semantic role labeling)의 성능을 향상시켰다. 더 최근에 Rei의 연구는 보조 언어모델링 목적함수를 목표 과제 함수에 추가해서 sequence labeling task에서 성능향상을 얻었다. GPT도 보조목적함수를 사용하지만, 비지도 사전학습이 이미 목표 과제에 관련된 여러 언어적 정보를 이미 학습했다.
+  보조적인 비지도학습 목적함수를 추가하는 것은 준지도학습의 대안이다. Collobert and Weston의 초기 연구에서 POS tagging, Chunking(명사구 묶기), NER, 언어 모델링과 같은 다양한 보조 NLP 정보를 이용하여 문맥적 역할 라벨링(semantic role labeling)의 성능을 향상시켰다. 더 최근에 Rei의 연구는 보조 언어모델링 목적함수를 목표 과제 함수에 추가해서 sequence labeling task에서 성능향상을 얻었다. GPT도 보조목적함수를 사용하지만, 비지도 사전학습이 이미 목표 과제에 관련된 여러 언어적 정보를 이미 학습했다.
 
 <br/>
 
@@ -114,15 +114,15 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
 
 - **Textual entailment**
 
- 함의 과제에서는 전제 p와 가정 h를 구분자 $로 연결하였다.   
+  함의 과제에서는 전제 p와 가정 h를 구분자 $로 연결하였다.   
 
 - **Similarity**
 
- 유사도 과제에서, 두 개의 텍스트 사이에 순서가 없다. 따라서, 텍스트 두 개를 다른 순서로 이어붙여 총 2개를 입력으로 쓴다(중간에 구분자를 넣는다). 이는 각각 정방향으로 representation으로 변화되어,  Transformer에 입력으로 들어간다.  
+  유사도 과제에서, 두 개의 텍스트 사이에 순서가 없다. 따라서, 텍스트 두 개를 다른 순서로 이어붙여 총 2개를 입력으로 쓴다(중간에 구분자를 넣는다). 이는 각각 정방향으로 representation으로 변화되어,  Transformer에 입력으로 들어간다.  
 
 - **QA and Commonsense reasoning**
 
- 이 과제를 위해서, 문맥 문서 z, 질문 q, 가능한 답변 {ak}가 주어진다. 문맥문서(documnet context)와 질문을 결합하고, 가능한 답을 더한다. 그 사이에 구분자 $를 추가하여, [z; q; $; a_k]와 같은 형태로 입력값을 생성한다. 각 입력 값들은 독립적으로 처리되며, 입력의 개수는 답변의 개수만큼 생성된다.  
+  이 과제를 위해서, 문맥 문서 z, 질문 q, 가능한 답변 {ak}가 주어진다. 문맥문서(documnet context)와 질문을 결합하고, 가능한 답을 더한다. 그 사이에 구분자 $를 추가하여, [z; q; $; a_k]와 같은 형태로 입력값을 생성한다. 각 입력 값들은 독립적으로 처리되며, 입력의 개수는 답변의 개수만큼 생성된다.  
  
  <br/>
 
@@ -162,7 +162,7 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
 	
 <br/>
 
- **Natural Language Inference**  
+ - **Natural Language Inference**  
  
  <img src="https://user-images.githubusercontent.com/11614046/105789331-96e94c80-5fc5-11eb-92ee-2d4e3736a920.png" width="70%">  
 
@@ -170,7 +170,7 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
 
  <br/>
 
- **Question answering and Commonsense reasoning**  
+ - **Question answering and Commonsense reasoning**  
  
  <img src="https://user-images.githubusercontent.com/11614046/105789544-fd6e6a80-5fc5-11eb-908e-37e0b26b1086.png" width="70%">  
 
@@ -178,7 +178,7 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
 
  <br/>
 
- **Semantic Similarity**  
+ - **Semantic Similarity**  
 
  <img src="https://user-images.githubusercontent.com/11614046/105789735-4e7e5e80-5fc6-11eb-8917-6d096d31cd53.png" width="70%">  
 
@@ -186,7 +186,7 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
  
  <br/>
 
- **Semantic Similarity**  
+ - **Classification**  
 
  <결과값은 위의 사진에서 확인>
 
@@ -198,7 +198,7 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
 
 ## 5. Analysis  
 
- **Impact of number of layers transferred**  
+ - **Impact of number of layers transferred**  
 
  아래 Figure 2의 왼쪽은 layer의 수를 다르게 하면서 RACE와 MultiNLI에 대해 실험을 진행한 것이다. transferring embedding이 성능 향상을 가져오며, 레이어의 개수가 늘어날수록 하나의 transformer layer 당 9%의 성능향상이 이뤄졌다. 이는 사전학습된 모델의 각각의 layer가 문제를 푸는 데 있어 유용한 기능을 한다는 것을 의미한다.  
  
@@ -206,25 +206,25 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
  <br/>
  <br/>
 
- **Zero-shot Behaviors**  
+ - **Zero-shot Behaviors**  
 
  왜 Transformer를 활용한 사전학습 언어모델은 효율적인 것일까? 가설을 세워보면, generative model이 언어 모델링 능력을 향상시키기 위해 많은 taskf를 수행하는 법을 배울 수 있다는 것과 LSTM보다 transformer의 attentional memory가 전이에 더 도움을 준다는 것이 있다. 귀납적인 풀이를 위해서 우리는 generative model이 과제맞춤-finetuning없이 과제들을 수행하도록 해보았다. 위의 그림 오른쪽을 보면, 사전학습을 오래할수록 모든 과제에 있어서의 성능이 안정적이고 꾸준하게 상승한다는 것을 알 수 있다. finetuning없이 pre-training만을 실시한 LSTM은 더 높은 변동성을 보여줬으며, Transformer의 구조보다 전이에 유리하지 않다는 점을 알 수 있다.  
  
  <br/>
 
- **Ablation studies**  
+ - **Ablation studies**  
 
 3종류의 ablation study(특정 부위를 제거하여 해당 부위의 기능을 알아보는 연구)를 진행했다. 결과는 아래의 표와 같다.  
 
- 1.미세조정을 할 때, 보조적인 LM 목적함수를 제거한다.
-  - 보조적 목적함수는 NLI과 QQP에서 성능향상을 보여줬다. 큰 데이터셋에서는 이점이 있지만, 작은 데이터셋에서는 그렇지 않았다.
+ 1.미세조정을 할 때, 보조적인 LM 목적함수를 제거한다.  
+  -> 보조적 목적함수는 NLI과 QQP에서 성능향상을 보여줬다. 큰 데이터셋에서는 이점이 있지만, 작은 데이터셋에서는 그렇지 않았다.
 
- 2.Transformer를 같은 구조의 LSTM(2048unit)로 대체하였는데 5.6점의 점수 하락이 있었다. 
-  - 성능이 좋은 경우는 MRPC 뿐이었다.
+ 2.Transformer를 같은 구조의 LSTM(2048unit)로 대체하였는데 5.6점의 점수 하락이 있었다.  
+  -> 성능이 좋은 경우는 MRPC 뿐이었다.
 
  
- 3.Transformer를 사전학습 없이 바로 지도학습을 하도록 해보았다.
- - 사전학습의 부족은 전체적으로 14.8% 정도의 성능 저하를 가져왔다. 
+ 3.Transformer를 사전학습 없이 바로 지도학습을 하도록 해보았다.  
+ -> 사전학습의 부족은 전체적으로 14.8% 정도의 성능 저하를 가져왔다. 
 
  <img src="https://user-images.githubusercontent.com/11614046/105931966-82718680-608f-11eb-8d34-8b746c8b2f3a.png" width="70%">  
 
@@ -242,7 +242,7 @@ Encoder와 Decoder를 사용하는 attention기반의 Transformer가 2017년애 
 
 이 논문은 BERT와 비슷한 시기에 나왔지만, 덜 유명한 논문이다. 왜냐하면 BERT가 다양한 task에 대해 더 뛰어난 결과를 보여주기 때문이다. 사실, BERT와 GPT모델은 서로 pre-training 기법이 약간만 다른 모델이다. Bert는 encoder를 사용해 문장 전체를 보고 학습하지만, GPT는 decoder를 사용해 정방향으로만 학습을 진행한다. 하지만 GPT모델은 language model 기반이기에 BERT보다 언어 생성에 유리하다는 장점이 있으며, 이는 최근에 나온 GPT3의 위력을 통해 확인 가능하다. 그래도 기존의 LSTM에서 벗어나 Transformer를 기반으로 pre-training + fine-tuning이라는 방식을 제시했다는 점에서 의미가 있는 논문이라고 생각한다.
 
- <img src="https://user-images.githubusercontent.com/11614046/105942620-ebaec500-60a2-11eb-89f8-564d13d91886.png" width="50%">  
+ <img src="https://user-images.githubusercontent.com/11614046/105942620-ebaec500-60a2-11eb-89f8-564d13d91886.png" width="60%">  
 
 
 ## Reference
