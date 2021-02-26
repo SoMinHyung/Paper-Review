@@ -159,7 +159,7 @@ https://arxiv.org/abs/1810.04805
  
  Figure1에서 보인바와 같이, QA과제에서 우리는 입력 질문과 문단을 하나의 sequence로 표현했으며, 질문은 embedding A 문단은 embedding B로 표현했다. 그리고 미세조정을 할 때, 시작 vector를 S ∈ 𝑹^H, 끝 vector를 E ∈ 𝑹^H로 추가했다. 그리고 타겟 단어 i의 시작 토큰일 확률은 Ti와 S를 dot-product하여 softmax하여 계산한다. 유사한 식으로 끝 토큰일 확률을 구한다. 위치가 i부터 j까지인 후보 span의 점수는  S*Ti + E*Tj를 하고, j가 i보다 크면서 점수가 최대인 것을 예측값으로 선정한다.  훈련 목적함수로는 log-likelihood를 사용한다. 
  
- <img src="https://user-images.githubusercontent.com/11614046/108447119-aa28c880-72a2-11eb-8977-e43199697104.png" width="60%"> 
+ <img src="https://user-images.githubusercontent.com/11614046/108447119-aa28c880-72a2-11eb-8977-e43199697104.png" width="40%"> 
  
  결과는 위와 같다. 역시나 BERT Large가 wide margin을 통해 가장 성능이 좋았음을 알 수 있다.
 
@@ -171,7 +171,7 @@ https://arxiv.org/abs/1810.04805
  
  기본적인 구조는 SQuAD 1.1과 동일하게 했지만, 정답이 없는 경우에는 정답의 시작과 끝이 CLS토큰을 가르키도록 설정했다. 
  
- <img src="https://user-images.githubusercontent.com/11614046/108447678-a2b5ef00-72a3-11eb-9069-03752f859c11.png" width="60%"> 
+ <img src="https://user-images.githubusercontent.com/11614046/108447678-a2b5ef00-72a3-11eb-9069-03752f859c11.png" width="40%"> 
 
  이전의 SOTA보다 성능이 F1 score 5.1이 개선된 것을 알 수 있다.
  
@@ -183,7 +183,7 @@ https://arxiv.org/abs/1810.04805
  
  SWAT데이터셋으로 미세조정을 할 때, 4개의 입력 sequence를 만들었는데 각각은 주어진 문장(문장A)과 가능한 후보문장(문장B)를 합쳐서 만들었다. 이 과제에만 사용되는 파라미터에는 CLS토큰에 대응하는 벡터값 C를 softmax하여 정규화한 값이 있다.  
 
- <img src="https://user-images.githubusercontent.com/11614046/108644623-20236e80-74f3-11eb-91a3-e7a2541859da.png" width="60%"> 
+ <img src="https://user-images.githubusercontent.com/11614046/108644623-20236e80-74f3-11eb-91a3-e7a2541859da.png" width="40%"> 
  
  우리는 이 모델을 2e-5의 learning rate, batch-size 16, epoch 3로 미세조정하였다. 결과는 Table 4와 같다. BERT Large는 기존의 baseline인 ESIM+ELMOfmf 27.1%, GPT를 8.3% outperform한다.  
  
@@ -207,7 +207,7 @@ https://arxiv.org/abs/1810.04805
  
  <br/> 
  
- <img src="https://user-images.githubusercontent.com/11614046/108646107-3122ae80-74f8-11eb-8ef6-1336e98229a8.png" width="80%">  
+ <img src="https://user-images.githubusercontent.com/11614046/108646107-3122ae80-74f8-11eb-8ef6-1336e98229a8.png" width="40%">  
  
  첫번째로 NSP에 따른 차이점을 비교해보았다. Table 5에서 NSP를 제거하면 QNLI, MNLI, SQuAD 1.1에서 성능이 떨어지는 것을 볼 수 있다. 그 다음에, 우리는 NO NSP와 NO NSP+LTR을 비교해보았다. LTR모델은 MLM모델보다 전반적으로 모든 부분에서 성능이 떨어졌으며, MRPC와 SQuAD에서 특히 성능이 엄청 떨어지는 모습을 보였다. 
 
@@ -223,7 +223,7 @@ https://arxiv.org/abs/1810.04805
 
  <br/>
 
- <img src="https://user-images.githubusercontent.com/11614046/108646229-819a0c00-74f8-11eb-8567-ea8e656e5ac8.png" width="80%">  
+ <img src="https://user-images.githubusercontent.com/11614046/108646229-819a0c00-74f8-11eb-8567-ea8e656e5ac8.png" width="40%">  
 
  Table 6에서 GLUE의 성적을 볼 수 있다. 5번의 미세조정을 랜덤 시작한 결과들의 평균 값이다. 4개의 데이터셋에서 모델 사이즈가 클수록  성능이 개선되는 점이 보이며, 데이터가 3600개밖에 안되는 MRPC에서도 이러한 경향을 보였다. 이미 큰 모델을 더 크게 만들어서 더 좋은 성능을 얻을 수 있다는 점이 놀랍다. 이에 따라, BERT base는 파라미터 110M개, BERT large는 파라미터 340M개이다.  
  
@@ -239,7 +239,7 @@ https://arxiv.org/abs/1810.04805
 
  Fine-tuning접근법을 제거하기 위해서, 우리는 BERT를 fine-tuning하지않고 내부에 활성화된 레이어들에서 토큰의 활성화값을 추출했다. 이러한 문맥적 임베딩은 768차원 BILSTM + classification 레이어의 input으로 사용되었다.  
  
- <img src="https://user-images.githubusercontent.com/11614046/108932272-65c76f00-768c-11eb-9c19-85948d1c133e.png" width="80%">  
+ <img src="https://user-images.githubusercontent.com/11614046/108932272-65c76f00-768c-11eb-9c19-85948d1c133e.png" width="40%">  
  
  결과는 Table7과 같다. BERT Large는 최고의 성능을 보였다. 위쪽 4개의 encoder 값들을 concat하여 feature로 사용했을 때 최고의 성능이 나타났으며, finetuning한 결과와 0.3밖에 차이가 나지 않았다. 이는 BERT가 finetuning과 feature-based 접근법 모두에서 효과적이라는 사실을 증명한다.  
  
@@ -346,7 +346,7 @@ https://arxiv.org/abs/1810.04805
 
  BERT를 finetuning하여 다양한 과제를 수행한 결과는 Figure 4에서 볼 수 있다. 우리의 과제 맞춤형 모델은 BERT에 output Layer 하나만을 더해주어서, parameter가 최소한으로만 변할 수 있었다. 이러한 과제들 사이에서, (a) (b)는 sequence level의 과제이며, (c) (d)는 token-level의 과제이다. Figure 4에서 E는 input embedding이고, Ti는 token i의 contextual representation이고, [CLS]는 분류를 위한 결과이며, [SEP]는 비 연속적인 토큰 sequence를 분류하기 위한 스페셜토큰이다.  
 
- <img src="https://user-images.githubusercontent.com/11614046/109091519-4d248b00-7758-11eb-988d-3c8a84ff974a.png" width="80%">  
+ <img src="https://user-images.githubusercontent.com/11614046/109091519-4d248b00-7758-11eb-988d-3c8a84ff974a.png" width="60%">  
 
  <br/>
  <br/>
@@ -380,7 +380,7 @@ https://arxiv.org/abs/1810.04805
 
 #### C.1 Effect of Number of Training steps
 
- <img src="https://user-images.githubusercontent.com/11614046/109238425-dbf7dd00-7816-11eb-8c95-f1c27d59ad75.png" width="80%">  
+ <img src="https://user-images.githubusercontent.com/11614046/109238425-dbf7dd00-7816-11eb-8c95-f1c27d59ad75.png" width="40%">  
 
  Figure 5는 MNLI Dev를 k번 사전학습을 한 뒤, 미세조정을 한 accuracy를 그린 표이다. 이를 보면 다음과 같은 질문에 이렇게 대답할 수 있다.
 
@@ -400,7 +400,7 @@ https://arxiv.org/abs/1810.04805
 
  마스킹 전략의 목표는 미세조정에서 나오지 않는 [MASK] 토큰으로 인해 발생하는 사전학습과 미세조정 간의 차이를 줄이기 위한 전략이라는 점이다. MNLI와 NER에서 dev 데이터의 성능 결과는 Table8과 같다. NER에서는 fine-tuning과 feature-based방식을 둘 다 테스트해보았는데, feature-based는 representation을 재조정할 기회가 없기 때문에 불일치가 더욱 증폭될 것이라고 예상했다.  
 
- <img src="https://user-images.githubusercontent.com/11614046/109240452-e0be9000-781a-11eb-9658-08a6852378ec.png" width="80%">  
+ <img src="https://user-images.githubusercontent.com/11614046/109240452-e0be9000-781a-11eb-9658-08a6852378ec.png" width="40%">  
 
  표에 따르면, MASK는 타겟 토큰을 MLM을 하기 위해 [MASK]로 변환했음을 의미한다. SAME은 타겟토큰을 그대로 놔둔것이다. RND는 타겟토큰을 랜덤으로 다른 토큰으로 변환한 것을 의미한다.  
  
