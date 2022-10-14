@@ -54,74 +54,220 @@ NAACL, 2015
 
 ## 3. Transition form Light ERE to Rich ERE
 
-Attention으로 대체된 encoder-decoder구조는 다음과 같다. 
+Light ERE의 간소화된 태그는 태그를 빠르게 확장할 수 있도록 해주었다.  DEFT 프로그램이 더 복잡한 알고리즘과 평가로 이동함에 따라, ERE 프레임워크 내에서 더 풍부한 이벤트의 표현으로 전환하는 것은 필수적이게 되었다. Rich ERE의 개발은 문사 간의 교차, 언어 간의 교차 이벤트 표현 뿐만 아니라 이벤트 - 이벤트 관계의 영역으로 향후 확장을 위한 토대를 마련한다. Rich ERE로의 전환은 확장된 이벤트와 이벤트 구문에 대한 태깅 가이드라인의 발전과 새로운 태깅 과제를 다룰 새로운 태깅툴의 발전을 요구한다. 
+
+<br/>
+
+### 3.1. Development of Annotation Guidelines for Rich ERE
+
+#### 3.1.1 Expanded Entity Annotation
+
+ Rich 엔티티 태깅은 일반적으로 태깅가능성의 증가부터 시작하여 Light 태깅의 많은 영역을 확장한다. 태깅을 세부적이고 지정된 엔티티로 제한하는 대신에, 우리는 ACE가 비세부적이며 일반적인 엔티티라고 부르는 대상까지 Rich ERE 태깅의 범위에 추가하였다. “non-specific(NonSPC)”라는 포괄적 용어 하에서, 우리는 Light ERE에서 수집하는 Specific(SPC) 엔티티를 포함해서 비세부적이며 일반적인 엔티티까지 이제 수집한다. 우리는 Light ERE 데이터를 태깅하는 도중에 일반적인 언어를 포함한 많은 토론 포럼 문서를 접했다.  이전에 우리는 이러한 문서들을 제외했지만, Rich ERE에서는 NonSPC 엔티티를 포함했기 때문에 우리의 태깅가능한 문서의 범위는 더욱 확장됐다.
+
+ ACE의 특징 중 우리가 되살린 몇가지들은 명목적인 헤드마킹과 Location과 Facility 개체타입을 구분한 것이다. ACE에서 요구하는 대로 명명되었거나 수식하는 헤드를 마킹하는 대신에, 헤드들은 Rich ERE에 있는 수식 멘션들만 수동적으로 마킹되었다. 명명되었거나 수식하는 헤드들이 일반적으로 엔티티 멘션과 같은 텍스트이기 때문에, 그들의 헤드들은 수동적으로 따로 마킹될 필요는 없다. 그러나, 명목상의 멘션 헤드들은 사소한 파생이 아니기 때문에, 그들은 Rich ERE에서 수동적으로 마킹되었다. 게다가, Light ERE는 지역, 지형, 건물, 그리고 다른 구조물들을 Location 엔티티 타입에 통합시켰다. ACE에 이어서 TAC KBP 평가과제를 더 잘 일치시키기 위해서, Rich ERE는 Light ERE의 Location 엔티티 타입을 Facility와 Location 타입으로 분리하였다. 인공 건축물과 기반 시설들은 Facilities로 간주되었으며, 지역, 지형, 그리고 다른 비기술 지역들은 Location으로 나뉘어집니다. 예를 들면 아래와 같습니다. (명목상의 멘션의 헤드는 밑줄로 표현됩니다.) 
+
+ - [Tourists]PER.NOM.NonSPC always end up at [Love Park]FAC.NAM.SPC
+
+ - [The last four tourists to show up]PER.NOM.SPC missed the bus
+
+ 게다가, 우리는 엔티티 수준에서 태깅되지 않는 이벤트와 관계를 체크하는 Fillers 구문의 클래스를 새로 만들었다. Filler 구문은 태그된 관계나 이벤트에서 구문 역할을 충족시킬 때만 태깅이 된다. Filler 구문의 예시는 아래의 관계와 이벤트의 논의에 포함되어 있다. ACE는 weapon과 vehicle을 엔티티로 철저하게 태그한 반면에, Rich ERE는 그것들을 argument filler로 태깅하였다. Rich ERE는 또한 commodities 태그를 filler로 태깅하였다.
+
+ 추가적으로, Light ERE에서 제목 엔티티는 argument filler로 재분류되었는데, 왜냐하면 이들이 관계 구문에서 명명된 사람과 연결될 때만 태깅이 되었기 때문이다. argument filler로 분류된 것들은 Title, Age, URL, Sentence, Crime, Money, Vehicle, Weapon, Commodity, Time 타입이다. 이러한 각 요소들은 특정한 관계나 이벤트 서브타입에 대응되며, 이는 상응하는 서브타입이 해당 정보에 적합할 경우에만 표시된다는 의미이다. 예를 들어, 한 사람의 나이는 일반적인 소속-인격 관계의 argument filler로만 태깅될 수 있으며, weapon은 conflict, attack, manufacture.Artifact, Life.injure와 같은 제한된 숫자의 이벤트 서브타입에서만 태깅이 된다.
+
+<br/>
+
+#### 3.1.2 Expanded Relation Annotation
+
+ Rich ERE 관계는 Light ERE의 10개 서브타입에서 Rich ERE의 20개 서브타입으로 온톨로지를 2배 늘림으로써 영감을 얻기위해 TAC KBP Slot Filling 평가를 참고하였다. KBP Slot Filling 과제는 태깅하는 사람에게 ERE 태깅과 범위가 매우 유사한 텍스트 정보를 찾도록 요구합니다. 예를 들어, ERE와 KBP Slot Filling는 둘 다 자회사-모회사 관계와 조직의 위치뿐만 아니라 조직, 지분관계, 국적에 기반한 요소내에서 개인의 고용과 멤버쉽에 기반한 자료들에 대해 태깅합니다. 이는 KBP Slot Filling의 더 많은 측면을 ERE 관계 온톨로지에 통합하기 위한 자연스러운 과정입니다. 크로스-프로젝트 동기화의 일부분은 어떤 관계 타입에 대해서 새로운 argument filler가 필요합니다. 관계에서 3개의 새로운 서브타입은 아래에 기술된 argument filler를 사용합니다. 개인-사회적 역할(제목), 일반 소속 또는 웹사이트(URL), 일반소속 또는 인물(나이). 표1은 Light ERE와 비교하여 Rich ERE에 새롭게 추가된 관계 목록이다. 
+
+ <img src="https://user-images.githubusercontent.com/11614046/177472065-5c2b2f38-cf3b-4a7f-82e5-75a68623971a.png" width="70%">
+
+ 마침내, Light ERE는 증명되고 확정된 관계에만 태깅을 하였지만, Rich ERE는 미래, 가설 그리고 조건부(부정되지는 않은) 관계에도 태깅을 하였다. 모든 관계들은 '확정된 것' VS '그 외 기타'의 차이점을 구별하기 위해 실재적인 속성에 할당된다. 이 추가점들과 변화점들은 아래의 예시에서 보여진다. 
+
+ - Now [53]AGE.ARG, [Barack Obama]PER.NAM.SPC signed important documents this morning. (General-Affiliation.PER-Age, Realis: Asserted)
+
+ - [[Spanish]GPE.NAM.SPC students]PER.NOM.SPC gathered to protest the growing cost of tuition. (General-Affiliation.MORE, Realis: Asserted)
+
+ - [She]PER.PRO.SPC has been living in [California]GPE.NAM.SPC for three years now. (Physical.Resident, Realis: Asserted)
+
+ - [He]PER.PRO.SPC may end up in [New York]GPE.NAM.SPC. (Physical.Located-Near, Realis: Other)
+
+<br/>
+
+#### 3.1.3 Expanded Event Annotation
+
+ 각각의 이벤트 멘션에 대해서, Rich ERE는 이벤트 타입과 서브타입, 그것의 실재 속성, 존재하는 구문 또는 참여자, 텍스트에서 요구되는 트리거에 대해서 레이블링하였다. 
+
+ Rich ERE의 이벤트 태깅은 Light ERE의 이벤트 태깅에 비해서 여러 분야에서의 태깅가능성이 높아진다. (약간 증가된 이벤트 온톨로지, 일반 및 기타(비실재) 이벤트 멘션의 추가, 이벤트 멘션에 대한 argument 없는 트리거의 추가, contact와 transaction 이벤트에 관한 추가적인 특성들, 멀티플 타입/서브타입에 대한 이벤트 태깅의 이중태그, 그리고 특성 타입의 coordination에 대한 이벤트 멘션의 다중 태깅)
 
 
+<br/>
 
+ **A. Expansion of event ontology, and additional attributes for Contact and Transaction events**
 
-### 3.1. Encoder
+ Rich ERE는 Light ERE의 이벤트 타입 목록에서 하나의 새로운 이벤트 타입을 추가합니다. 이벤트 타입의 전체 목록은 다음과 같습니다 : Life, Movement, Business, Conflict, Contact, Personnel, Transaction, Justice, Manufacture. Manufacture 이벤트 타입에는 Manufacture.Artifact라는 하나의 서브타입만이 있으며, 다음과 같은 argument를 가집니다 : agent, patient(weapon, facility, vehicle, commodity), time, location
 
-인코더은 bi-RNN구조로 이뤄져 있다. 
+ 예를 들면,
+
+ - [China]AGENT is reportedly **constructing** [a second aircraft carrier]PATIENT.VEHICLE
+
+ - [the Imboulou hydroelectric power station]PATIENT.FACILITY, which was **constructed** by [Chinese technicians]AGENT
+
+ 새로운 이벤트 타입 외에도, Rich ERE는 이미 존재하는 이벤트 타입에 몇몇 새로운 서브타입을 추가하였다. : Movement.Transport-Artifact, Contact.Broadcast, Contact.Contact, Transaction.Transaction.
+
+ Movement.Transport-Artifact 서브타입은 weapon, vehicle, facility, commodity를 patient로 가질 수 있습니다. 예를 들면,
+
+ - [122 kilos of heroin hidden in a truck]ARTIFACT.COMMODITY which was set to **cross** into [Greece]DESTINATION.GPE 
+
+ - [the cans of marijuana]ARTIFACT.COMMODITY were **launched** about 500 feet into the [U.S.]DESTINATION.GPE using [a pneumatic powered cannon]INSTRUMENT.WEAPON 
+
+ Contact 이벤트 멘션은 Formality (Formal, Informal, Can’t Tell), Scheduling (Planned, Spontaneous, Can’t Tell), Medium (In-person, Not-in-person, Can’t Tell), Audience (Two-way, One-way, Can’t Tell)의 속성으로 레이블링됩니다. Contact 이벤트 서브타입은 태깅된 속성에 따라 자동으로 결정된다. 
+
+ - Contact.Meet: Medium attribute must be “In-person” and audience attribute must be “Two-way” 
+
+ - Contact.Correspondence: Medium attribute must be “Not-in-person” and audience at- tribute must be “Two-way” 
+
+ - Contact.Broadcast: Any Contact event mention where the audience attribute is “One-way”
+
+ - Contact.Contact: Used when no more spe- cific subtype is available, and occurs when either the medium or audience attribute is “Can’t Tell”
+
+ Contact.Meet 와 Contact.Correspondence 는 Light ERE의 서브타입에서 변하지 않았지만,  Contact.Broadcast 와 Contact.Contact 는 Rich ERE에 추가된 새로운 서브타입이다.
+
+ Formality 와 Scheduling 속성은 모든 Contact 멘션에 태깅이 되지만, 이러한 속성은 서브타입 결정에 영향을 미치지 않는 점을 명심해야 한다. 
+
+ Transaction.Transaction 은 transaction이라는 이벤트가 언급이 된 것은 확실하지만, 문맥상 돈이나 상품이 전달되었는지는 명확하지 않은 경우를 나타내기 위해 추가된 새로운 서브타입이다. 예를 들어,
+
+ - I **received** a gift (Transaction.Transaction)
+
+ <br/>
+
+ **B. Addition of generic and other irrealis event mentions**
+
+ ERE 태그를 현재의 EAE와 END 과제와 더 가깝게 정렬하기 위해서, Rich ERE는 각 이벤트 멘션에 Realis 속성을 부여했다. 이는 EAE와 END 모두와 동기화되며, ACE 태깅과도 호환이 된다.
+
+ Realis 속성은 Actual(asserted), Generic(generic, habitual), 기타(future, hypothetical, negated, uncertain)이 있다. 이전의 Light ERE 태그는 Actual Event 멘션으로만 제한되었다.
+
+ - Actual: He **emailed** her about their plans
+ - Other: Saudi Arabia is scheduled to begin **building** the world’s tallest tower next week
+ - Generic: Turkey is a popular passageway for drug smugglers **trafficking** from south Asia
+to Europe
  
-<br/>
+ 이벤트 멘션의 realis와는 별개로 argument와 이벤트 멘션간의 realis 관계 역시 태깅될 것이다. 예를 들면,
 
-위의 그림과 같이 정방향 rnn으로 fw_h_i들을 만들고, 역방향 rnn으로 bw_h_i를 만든다.
+ - [+irrealis] “Jon” as the agent for the asserted Conflict.Attack event: [Jon] denied [he] master-minded the **attack**
 
-해당 fw_h_i와 bw_h_i를 concat해주면, 해당 input값인 x_i에 대한 hidden_state를 구한 것이다. 
+ <br/>
 
-기존의 인코더와는 다르게 S라는 fixed_size vector를 구하지 않는다.
+ **C. Addition of argumentless triggers for event mentions**
 
-<br/>
+ Light ERE와 다르게, Rich ERE는 텍스트에 있는 이벤트의 참가자나 argument가 존재하지 않더라도 이벤트 멘션 트리거의 태깅을 허용한다. 이 추가적인 태깅은 Rich ERE가 END와 더욱 유사하게 만들어준다.
 
-### 3.2. Decoder
+ <br/>
 
-디코더는 기존의 디코더와 크게 다르지 않다.
 
-기존 디코더는 현재 단어(y_i)를 알기 위해, 이전의 단어(y_i-1) + 이전의 state(s_i-1)를 이용해 현재의 state(s_i)를 구했다. 이렇게 구한 s_i로 y_i를 찾아낸다.
+ **D. Double tagging of event mentions for multiple types/subtypes**
 
-<br/>
+ Rich ERE는 ERE 이벤트 분류법에 있는 필수 추론 이벤트를 태그할 수 있도록 이벤트 트리거의 이중 태깅을 허용합니다. 예를 들어, 만약 Transaction 이벤트로 money와 ownership이 둘 다 이전된다면, 이벤트 멘션은 각각의 서브타입으로 한번 씩 두번 태깅되어야 할 것이다.
 
-attention의 디코더 역시 현재의 단어(y_i)를 알기 위해, 이전의 단어 (y_i-1) + 이전의 state(s_i-1)을 이용하는데 추가적으로 encoder에서 만든 hidden_state값을 이용한다.
+ - I **paid** $7 for the book (tagged as both Transaction.TRANSFER-OWNERSHIP, and Transaction.TRANSFER-MONEY)
 
-이는 식으로 나타내면 y_i <- s_i = g(y_i-1, s_i, c)로 표현된다.
+ 이러한 방식으로 태깅된 트리거들은 문맥상에서 하나 이상의 이벤트/서브타입을 명확히 나타내는 트리거들로 제한된다.
 
-우리의 목적은 s_i를 구하는 것이기 때문에, c값을 구하는 방법을 알아보겠다.
+ - Conflict.Attack and either Life.Injure or Life.Die : murder, victim, decapitate, kill
+ - Transaction.Transfer‐Money and Transaction.Transfer‐Ownership (money being exchanged for an item): buy, purchase, pick up
+ - Legal language that might trigger multiple Justice Events or other Event Types: guilty plea, execution (Life.Die / Justice. Execute), death penalty, testimony (Justice.Trial Hearing, Contact.Meet)
 
-c는 s_i-1과 c값을 구성한 h_j값들의 유사도를 계산한 스코어 값이다. 
+ Light ERE로부터의 변경에서 이벤트 트리거들은 엔티티와 동일한 텍스트이거나 NOM 엔티티 멘션의 헨드와 동일한 문자열일 수도 있다. 엔티티 멘션 내에서 중첩된 이벤트 트리거 역시 허용된다.
 
-이렇게 구한 각 h_j들의 스코어값들에 softmax를 취해주면, 해당 h_j의 등장확률로 치환할 수 있다.
+ - The situation escalated and the **[murderer]** fled the scene. (This is an event trigger, even though “murderer” would already be a nom- inal PER entity.)
+ - The mayor agreed to meet with **[angry protestors]**. (This is a trigger, even though “protesters” would already be the head of a nominal PER entity.)
+ - **[The one who divorced me]** only thinks of himself. (Here “divorce” can be a trigger for a Life.DIVORCE event, even though it is nested within a longer PER entity and it is not the head noun.)
 
-높은 확률을 가진 hidden_state들을 강하게 반영해주면, 해당 단어의 가중치가 증가하여 문맥의 흐름을 반영한 디코딩이 가능하다.
+ <br/>
 
-<br/>
+ **E. Multiple tagging of event mentions for certain types of coordination**
 
-## 4. Experiment Settings
+ Rich ERE는 또한 argument의 조정을 통해 여러 이벤트가 표시된 경우, 단일 트리거에 여러 번 태그를 진행할 수 있다. 조정된 Argument의 역할은 단일 이벤트 멘션이나 여러 이벤트 멘션에 태깅이 되는지의 여부를 결정하는 것이다.
 
-Attention 알고리즘을 사용하여, 해당 논문은 SOTA결과를 얻을 수 있었다. 
+ - 만약, Time이나 Place의 역할이 조정되거나, 별도로 표시된 Time과 Place가 있는 경우에는 여러 이벤트가 태깅됩니다. 
+ - 만약 다른 argument의 역할이 조정된다면, 단일 이벤트가 태깅된다. 이런 경우에, 각각의 조정된 argument들은 이벤트 멘션의 argument로 따로 태깅되며, 결과는 단일 이벤트에 복수개의 멘션이 조정된 argument 역할에 태그가 지정된 복수의 argument으로 구성된 단일 이벤트이다.
 
-하지만 데이터셋과 결과가 중요한 것은 아니기에 넘어가도록 한다. 앞에서 attention의 등장 배경과 그 내용에 대해서 알아봤으니 충분하다고 생각한다.
+ 만약 문맥이나 언어가 너무 복잡해서 이벤트의 개수를 알기 어렵다면, 태깅자는 여러개의 argument로 하나의 이벤트에 태깅하도록 교육받았다.
 
-주목할만한 것은 논문에서 목표한 바와 같이 아래 그래프처럼 문장의 길이가 길어져도 성능이 줄어들지 않았다는 점이다.
+ 이 예시를 보면, Time argument가 다르기 때문에 2개의 Conflict.Attack 이벤트가 존재하며, “murderer”에 의해 발생된 2개의 Life.Die 이벤트가 존재한다.
 
-![image](https://user-images.githubusercontent.com/11614046/95726099-76fe7900-0cb3-11eb-9c69-bc6f1821ac8f.png)
+ - Cipriani was sentenced to life in prison for the **murder** of Renault chief George Besse in 1986 and the head of government arms sales Rene Audran a year earlier
+   - Conflict.Attack: Trigger = murder, agent = Cipriani, victim = George Besse, time = 1986
+   - Conflict.Attack: Trigger = murder, agent = Cipriani, victim = Rene Audran, time = a year earlier
+   - Life.Die: Trigger = murder, argument = George Besse, agent = Cipriani, time = 1986
+   - Life.Die: Trigger = murder, argument = Rene Audran, agent = Cipriani, time = a year earlier
 
-<br/>
+ 아래의 예제에서는 복수 개의 giver argument와 복수 개의 recipient argument가 있지만 1개의 이벤트만이 태깅되었다.
 
-## 5. Result 
+ - China and the US are the biggest **lenders** to Brazil and India
+   - Transaction.Transfer-Money: Trigger = lenders, giver = China, giver = US, recipient = Brazil, recipient = India
 
-각 단어들의 hidden_state를 가중치로 변환해준 결과이다. 
+ <br/>
 
-자신에 해당되는 부분의 가중치가 가장 높았으며, 그 주변의 단어들이 높은 것을 볼 수 있다.
+#### 3.1.4 Event Hoppers and Event Coreference
 
-![image](https://user-images.githubusercontent.com/11614046/95726260-a7deae00-0cb3-11eb-8603-8afb4087ada6.png)
+ ACE뿐만 아니라 Light ERE에서 이벤트의 상호참조는 이벤트 정의를 엄격하게 하기 위해서 제한되었다. 구성요소기준에 따라서 Light ERE에서 태깅자들은 같은 사람, 대상, 시간, 위치라면 두 사건을 상호참조 사건으로 태깅하였다, 그러나, 태깅자들이 직관적으로 느끼기 때문에 엄격한 이벤트 분류 기준을 맞추지 못한 이벤트 멘션들이 많았으며, Light ERE와 ACE에서 상호참조되지 않은 것들이 많았다. 몇몇 이벤트들은 태깅자들의 직관적인 판단과 엄격한 상호참조 기준 사이의 헷갈림때문에 상호참조로 일관되게 태깅되지 않았다. 
 
+ Rich ERE에서는 Event Hopper의 개념을 더 포괄적이고 이벤트 상호참조의 개념으로 만들었다. Event hopper는 이전이라면 이벤트 요구조건을 충족시키지 못했을 이벤트이더라도 태깅자들이 상호참조라는 느낌을 주는 이벤트에의 언급을 포함한다. 좀 더 구체적으로는, 동일한 hopper에 속하는 이벤트 멘션들의 특징은 다음과 같습니다.
+
+ - 동일한 이벤트와 서브이벤트를 갖습니다. (Contact.Contact와 Transaction.Transaction 멘션은 각각 어느 Contact와 Transaction에 추가될 수 있기 때문에 예외입니다.)
+ - 동일한 시간, 장소 범위이다. 완벽하게 똑같은 날이거나 같은 시간적 표현일 필요는 없다. (Attack in Baghdad on Thursday vs. Bombing in the Green Zone last week)
+ - 트리거의 형태는 다를 수 있다. (Assaulting 32 people vs wielded a knife)
+ - 이벤트 argument는 상호호환적이지 않거나 충돌할 수 있다 (18killed vs dozens killed)
+ - Realis 상태는 다를 수 있다. (will travel [OTHER] to Europe next week vs. is on a 5 day trip [ACTUAL])
+
+ 태깅된 모든 이벤트 멘션들은 Rich ERE에서는 모두 event hopper로 포함되며, 동일한 이벤트 발생을 나타내는 모든 태그된 이벤트 멘션들은 동일한 event hopper로 그룹화된다.
+
+ Event hoppers는 태깅자들이 더 많은 멘션들을 그룹화할 수 있도록 해줘서, Rich ERE에 더 많은 이벤트 argument가 라벨링되도록 도와준다. 이렇게 더 풍부한 태깅은 더 완벽한 지식베이스와 2015년의 Event Argument Linking and END 평가에서 더 나은 지원으로 이어질 것이다. 
+
+ <br/>
+
+### 3.2 Development of an Annotation GUI for Rich ERE
+
+ Rich ERE 태깅도구는 Wright et al.(2012)에 설명된 프레임워크를 따라서 개발되어, Rich ERE를 위한 새로운 인터페이스를 빠르게 개발할 수 있게 되었다. 많은 기능들이 이전 인터페이스를 위해 개발되었기 때문에 추가적인 개발 시간이 필요하지 않았다는 점에서 무료로 포함되었다. 이 중에 하나의 중요한 예시는 임의적으로 겹칠 수 있으며 다른 태그(예를 들면 엔티티 타입)들을 색칠할 수 있으며, 사용자들이 태그들 사이에서 클릭하여 탐색할 수 있는 기능이 가능한 텍스트 범위를 태깅하는 방식이다. Rich ERE를 위해 특별히 개발된 중요한 기능은 서로를 가르킬 수 있게 해주는 “참조 태깅” 기능이다. 하나의 멘션이나 개체명에 대한 완전한 태깅이 수행되면, 단일 태깅은 관계나 이벤트 argument에 연결이 될 수 있지만, 그러나 참조하면 기존의 태깅값들이 안전하게 변경될 수 있습니다. 또한, 태깅 매니저들은 인터페이스가 정의된 데이터베이스에의 직접적인 접근권한이 허용된 편집자이기 때문에, 태깅툴의 세부사항을 넘어서 개발의 큰 역할을 했다. 매니저들은 위젯을 추가하고, 변경하며(예를들 면, 메뉴 선택 추가), 태그들간의 논리적 제약(예를 들면, “resident”관계는 person argument를 가져야만 한다)을 정하기도 하였다.
+
+ <br/>
+
+## 4. Linguistic Resources Labeled for ERE
+
+ 현재까지 우리는 NW와 DF를 포함하여 약 57만개의 영어 Light ERE 데이터와 20만개의 중국어 DF를 공개했다. 10만개의 스페인어 Light ERE는 현재 진행 중이며 몇 주 안에 완성될 것으로 예상된다. 영어 Rich ERE 태깅은 현재 진행중이며, 현재까지 32420개의 단어(91개문서)가 완료되었다. 우리는 17만개의 영어단어와 10만개의 중국어 스페인어 단어를 몇 주 안에 완성할 것으로 예상한다. Rich ERE 데이터의 일부분은 새롭지만, 나머지는 이전에 Light ERE에서 태깅되었던 것들이다. 각 언어, 장르, 과제의 세부사항은 아래의 Table 2에 나와있다. ERE 데이터는 현재 DEFT와 TAC KBP 수행자가 이용할 수 있으며, 미래에는 LDC의 카탈로그에도 게시되어 대부분의 연구자 커뮤니티가 활용할 수 있도록 할 것이다.
+
+ <img src="https://user-images.githubusercontent.com/11614046/179447437-916a2544-bb7e-49ac-8148-06834ca709e5.png" width="60%">
+
+ DEFT의 이번 단계의 대부분의 타겟은 영어, 중국어, 스페인어 데이터에서 각 언어당 400Kw의 Rich ERE를 완성하는 것이다. 스페인어와 중국어의 100Kw는 같은 데이터의 영어 번역에 대한 Rich ERE와 상응하도록 만들 것이다. 우리는 이 태깅 목표가 이번해 말까지 달성될 것으로 기대한다.
+
+ <br/>
+
+### 4.1 Smart Data Selection
+
+ 내용이 부족한 문서에 대한 태깅자의 노력을 최소화하기 위해서, 문서들은 1000토큰당 이벤트 트리거의 개수를 이용한 문서 트리거 밀도의 내림차순으로 태깅 파이프라인에 입력되었다. 트리거들은 자동적으로 ACE 2005 태깅(Walker et al., 2006)에 대해 훈련된 심층 신경망기반 태그와 맞춤 및 단어임베딩 기능을 활용하여 자동으로 태그를 지정하였다. 단어임베딩은 word2vec을 활용하여 수십억 개의 뉴스와 포럼 데이터의 수십억개의 단어를 훈련된 임베딩값이다. 이 선택 과정을 활용한 예비 결과는 태깅자들이 이전의 순서가 없었던 방식에 비해서 평균적으로 훨씬 풍부한 문서를 보고할 수 있었다는 점에서 고무적이었다.
+
+ <br/>
+
+### 4.2 Rich ERE Challenges and Next Steps
+
+ 이벤트 태깅에서의 한가지 과제는 서브이벤트 vs 이벤트 호퍼 를 구별한 기준을 정하는 것이다. 우리는 테스트 Rich ERE 태깅에서 이러한 문제를 발견하였으며, 목표는 서브이벤트가 미래에 이벤트 호퍼간의 관계를 갖도록 하는 것이다. 이벤트 호퍼사이의 관계를 표현하기 위해서, 우리는 인과성, 부분-전체, 전례, 가능성 등과 같은 비정체성 이벤트-이벤트 관계를 포착하기 위해서 Narrative Container (Pustejovsky and Stubbs, 2011)와 같은 개념을 추가할 계획이다. 이벤트 호퍼는 개별 이벤트 멘션과 Narrative Containers 사이의 수준을 정하는 역할을 한다. 이벤트 호퍼는 Narrative Containers로 그룹화되며, 관계들은 개별 이벤트 멘션이 아닌 이벤트 호퍼간의 관계가 되게 된다. 개별 이벤트 멘션간의 더 자세한 관계들은 Narrative Containers 간의 관계나 Narrative Containers의 이벤트 호퍼 사이의 이벤트-이벤트 관계에서 도출된다.
+
+ <br/>
+
+### 4.3 Inter-Annotator Agreement
+
+ 주석자간의 합의(IAA)에 대한 작업은 엔티티 멘션에서부터 이벤트까지 태깅 계층의 각 레벨에 사용되는 알고리즘을 설명하는Kulick et el(2014)의 방식을 기반으로 한다. 이 작업은 전체 엔티티뿐만 아니라 엔티티, 관계, 이벤트 멘션에 대한 평가까지도 초점을 둔다. 엔티티 멘션 맵핑의 알고리즘은 엔티티 멘션의 범위를 기반으로 하는 반면에, 관계와 이벤트 멘션의 맵핑은 엔티티 멘션 매핑에 따라 달라지는 argument들의 맵핑을 기반으로 하기 때문에 더욱 복잡하다. IAA 작업은 Rich ERE에 대한 이중 태깅에 대해 수행될 것이다. 분석 결과는 미래에 발표할 예정이다.
+
+ <br/>
+
+## 5. Conclusion 
+
+ Rich ERE 태깅은 확장된 태그 가능성, 확장된 범주, 현실 및 특수성에 대한 태깅, 이벤트 호퍼 레벨에서의 확장된 상호참조성을 포함하여 엔티티, 관계, 이벤트 태깅의 확장성도 포함한다. 확장 및 변경은 지식베이스에의 정보를 더욱 확장시켜줄 것이다. 미래에는 Rich ERE의 확장, 구체적으로 말하면 태그가능성의 확장과 이벤트 호퍼 레벨의 느슨한 상호참조성은 문서내의 이벤트-이벤트 관계와 궁극적으로 문서간과 언어를 넘어선 태깅의 지원까지 향상될 것으로 기대된다.
+
+  
+
+ <br/>
 
 ## 6. 요약
 
-Attention은 특정 대상에 대해 가중치를 주도록 하는 매커니즘이다.
-
-가중치를 주는 방식은 decoder에서 이전 시점의 state값과 encoder에서 만든 hidden_state의 유사도를 계산하여 도출한다.
-
-attention의 단점으로는 모든 hidden_state에 대해서 매번 모든 softmax연산을 해야하기 때문에 속도가 느려진다는 점이 있다. (연산량이 꽤 많이 증가한다.)
-
-하지만, 이 방법론의 등장으로 bert, gpt와 같은 획기적인 기법들이 등장할 수 있었다.
