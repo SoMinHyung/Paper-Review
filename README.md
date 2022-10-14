@@ -10,4 +10,6 @@
 * \[2018/06\] [**Improving Language Understanding by Generative Pre-Training(GPT-1)**](https://github.com/SoMinHyung/Paper-Review/blob/main/Review/Improving%20Language%20Understanding%20by%20Generative%20Pre-Training(GPT-1).md)  
 * \[2018/10\] [**BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding**](https://github.com/SoMinHyung/Paper-Review/blob/main/Review/BERT:%20Pre-training%20of%20Deep%20Bidirectional%20Transformers%20for%20Language%20Understanding.md)  
 
-
+## Surveys
+* \[2015/06\] [**From Light to Rich ERE: Annotation of Entities, Relations, and Events**](https://github.com/SoMinHyung/Paper-Review/blob/main/Review/From%20Light%20to%20Rich%20ERE%20:%20Annotation%20of%20Entites%2C%20Relations%2C%20and%20Events.md)
+* \[2018/06\] [**Supervised Open Information Extraction**]()
